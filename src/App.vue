@@ -15,40 +15,48 @@
       </div>
     </form>
 
-    <filterTabsComponent 
+    <filterTabsComponent
+      v-if="originalTodos.length"
       :allQty="originalTodos.length" 
       :activeQty="activeQty" 
-      :completedQty="completedQty"
-    /> 
-    
+      :completedQty="completedQty" />
+      
+    <div 
+      v-else class="has-text-centered">
+        <p class="is-size-4">Start adding new tasks</p>
+    </div>
     
 
-    <div  class="card mb-5"
-          :class="{'has-background-success-light': todo.completed}"
-          v-for="todo in todos">
-      <div class="card-content">
-        <div class="content">
-
-          <div class="columns is-mobile is-vcentered">
-            <div class="column" :class="{'has-text-success': todo.completed}">
-              <p :class="{ 'line-through': todo.completed }">{{ todo.content }}</p>
-            </div>
-            <div class="column is-narrow is-4 has-text-right">
-              <button 
-                class="button" 
-                :class="todo.completed ? 'is-success' : 'is-light'"
-                @click="completeTodo(todo.id)">
-                &check;   
-              </button>
-              <button class="button is-danger ml-2" @click="deleteTodo(todo.id)">
-                &cross;
-              </button>
+    <div  
+      class="card mb-5"
+      :class="{'has-background-success-light': todo.completed}"
+      v-for="todo in todos">
+        <div class="card-content">
+          <div class="content">
+            <div class="columns is-mobile is-vcentered">
+              <div class="column" :class="{'has-text-success': todo.completed}">
+                <p :class="{ 'line-through': todo.completed }">{{ todo.content }}</p>
+              </div>
+              <div class="column is-narrow is-4 has-text-right">
+                <button 
+                  class="button" 
+                  :class="todo.completed ? 'is-success' : 'is-light'"
+                  @click="completeTodo(todo.id)">
+                  &check;   
+                </button>
+                <button class="button is-danger ml-2" @click="deleteTodo(todo.id)">
+                  &cross;
+                </button>
+              </div>
             </div>
           </div>
-
         </div>
-        
-      </div>
+    </div>
+    
+    <div 
+      v-if="activeQty === 0"
+      class="has-text-centered">
+        <p class="is-size-4">You finished all tasks! &#128513;</p>
     </div>
 
   </div>
@@ -66,21 +74,25 @@ import { collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot } from 'fireb
 import { db } from './core/firebase';
 import filterTabsComponent from './components/filterTabs.component.vue';
 
+/*
+  firebase references
+*/
+const todosCollection = collection(db, 'todos');
+
 const todos = ref<Todo[]>([]);
 const originalTodos = ref<Todo[]>([]);
 const activeQty = ref<number>(0);
 const completedQty = ref<number>(0);
-
-
 const newTodoContent = ref('');
 
 
 const addTodo = () => {
   const newTodo: Partial<Todo> = {
     content: newTodoContent.value,
-    completed: false
+    completed: false,
+    date: Date.now()
   };
-  addDoc(collection(db, 'todos'), newTodo);
+  addDoc(todosCollection, newTodo);
   newTodoContent.value = '';
 };
 
@@ -89,7 +101,7 @@ const deleteTodo = (id: string) => {
 };
 
 const completeTodo = (id: string) => {
-  updateDoc(doc(db, 'todos', id), {
+  updateDoc(doc(todosCollection, id), {
     completed: !todos.value.find(todo => todo.id === id)!.completed
   });
 };
@@ -97,7 +109,7 @@ const completeTodo = (id: string) => {
 
 onMounted(() => {
   // GET TODOS FROM FIRESTORE REALTIME
-  onSnapshot(collection(db, 'todos'), (querySnapshot) => {
+  onSnapshot(todosCollection, (querySnapshot) => {
     todos.value = [];
     querySnapshot.forEach((doc) => {
       const id = doc.id;

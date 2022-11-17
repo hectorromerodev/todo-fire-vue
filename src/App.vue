@@ -52,7 +52,7 @@
           </div>
         </div>
     </div>
-    
+
     <div 
       v-if="activeQty === 0"
       class="has-text-centered">
@@ -70,7 +70,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
 import type { Todo } from './core/interfaces/todo.interface';
-import { collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot } from 'firebase/firestore';
+import { collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { db } from './core/firebase';
 import filterTabsComponent from './components/filterTabs.component.vue';
 
@@ -78,7 +78,11 @@ import filterTabsComponent from './components/filterTabs.component.vue';
   firebase references
 */
 const todosCollection = collection(db, 'todos');
+const todosCOllectionQuery = query(todosCollection, orderBy('createdAt', 'desc'));
 
+/*
+  reactive variables
+*/
 const todos = ref<Todo[]>([]);
 const originalTodos = ref<Todo[]>([]);
 const activeQty = ref<number>(0);
@@ -90,7 +94,7 @@ const addTodo = () => {
   const newTodo: Partial<Todo> = {
     content: newTodoContent.value,
     completed: false,
-    date: Date.now()
+    createdAt: Date.now()
   };
   addDoc(todosCollection, newTodo);
   newTodoContent.value = '';
@@ -109,7 +113,7 @@ const completeTodo = (id: string) => {
 
 onMounted(() => {
   // GET TODOS FROM FIRESTORE REALTIME
-  onSnapshot(todosCollection, (querySnapshot) => {
+  onSnapshot(todosCOllectionQuery, (querySnapshot) => {
     todos.value = [];
     querySnapshot.forEach((doc) => {
       const id = doc.id;

@@ -8,13 +8,19 @@
           <input v-model="newTodoContent" class="input is-large" type="text" placeholder="Add a todo">
         </p>
         <p class="control">
-          <button :disabled="!newTodoContent" class="button is-primary is-large">
+          <button :disabled="!newTodoContent" class="button is-info is-large">
             Add
           </button>
         </p>
       </div>
     </form>
 
+    <filterTabsComponent 
+      :allQty="originalTodos.length" 
+      :activeQty="activeQty" 
+      :completedQty="completedQty"
+    /> 
+    
     
 
     <div  class="card mb-5"
@@ -54,37 +60,94 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { v4 } from 'uuid';
+import { ref, onMounted, watch } from 'vue';
 import type { Todo } from './core/interfaces/todo.interface';
+import { collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot } from 'firebase/firestore';
+import { db } from './core/firebase';
+import filterTabsComponent from './components/filterTabs.component.vue';
 
 const todos = ref<Todo[]>([]);
+const originalTodos = ref<Todo[]>([]);
+const activeQty = ref<number>(0);
+const completedQty = ref<number>(0);
+
 
 const newTodoContent = ref('');
 
 
 const addTodo = () => {
-  const newTodo: Todo = {
-    id: v4(),
+  const newTodo: Partial<Todo> = {
     content: newTodoContent.value,
     completed: false
   };
-  todos.value.unshift(newTodo);
+  addDoc(collection(db, 'todos'), newTodo);
   newTodoContent.value = '';
 };
 
 const deleteTodo = (id: string) => {
-  todos.value = todos.value.filter(todo => todo.id !== id);
+  deleteDoc(doc(db, 'todos', id));
 };
 
 const completeTodo = (id: string) => {
-  todos.value = todos.value.map(todo => {
-    if (todo.id === id) {
-      todo.completed = !todo.completed;
-    }
-    return todo;
+  updateDoc(doc(db, 'todos', id), {
+    completed: !todos.value.find(todo => todo.id === id)!.completed
   });
 };
+
+
+onMounted(() => {
+  // GET TODOS FROM FIRESTORE REALTIME
+  onSnapshot(collection(db, 'todos'), (querySnapshot) => {
+    todos.value = [];
+    querySnapshot.forEach((doc) => {
+      const id = doc.id;
+      const todo: Todo = {
+        ...doc.data() as Todo,
+        id,
+      };
+      todos.value.push(todo);
+    });
+    originalTodos.value = todos.value;
+    onHashChange()
+  });
+});
+
+// CALCULATE ACTIVE AND COMPLETED TODOS
+watch(originalTodos, () => {
+  activeQty.value = originalTodos.value.filter(todo => !todo.completed).length;
+  completedQty.value = originalTodos.value.filter(todo => todo.completed).length;
+}); 
+
+const filterAll = () => {
+  todos.value = originalTodos.value;
+};
+const filterActive = () => {
+  todos.value = originalTodos.value;
+  todos.value = todos.value.filter((todo) => !todo.completed);
+};
+const filterCompleted = () => {
+  todos.value = originalTodos.value;
+  todos.value = todos.value.filter((todo) => todo.completed);
+}
+
+
+
+// WATCH FOR URL CHANGES
+window.addEventListener('hashchange', onHashChange);
+function onHashChange() {
+  const route = window.location.hash.replace(/#\/?/, '')
+  switch (route) {
+    case 'active':
+      filterActive();
+      break;
+    case 'completed':
+      filterCompleted();
+      break;
+    default:
+      filterAll();
+      break;
+  }
+}
 
 </script>
 

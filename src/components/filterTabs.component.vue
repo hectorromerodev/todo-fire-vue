@@ -1,9 +1,5 @@
 <template>
-  <!-- <div class="tags has-addons">
-    <span class="tag">{{ qty }}</span>
-    <span class="tag" :class="completed ? 'is-success' : 'is-danger'">{{completed ? 'Completed' : 'Not Completed'}}</span>
-  </div> -->
-  <div class="tabs is-centered is-boxed is-medium">
+  <div class="tabs is-centered is-boxed is-small is-mobile">
     <ul> 
       <li :class="activeTab === 'all' ? 'is-active' : ''">
         <a href="#all" @click="activeTab = 'all'; ">

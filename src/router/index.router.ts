@@ -5,8 +5,12 @@ const router: Router = createRouter({
   routes: [
     {
       path: "/",
-      name: "Home",
+      name: "home",
       component: () => import("../views/HomeView.vue"),
+    },
+    {
+      path: '/home',
+      redirect: '/',
     },
     {
       path: "/todos",
@@ -24,7 +28,7 @@ const router: Router = createRouter({
       component: () => import("@/views/auth/SignInView.vue"),
     },
     {
-      path: "forgot-password",
+      path: "/forgot-password",
       name: "forgot-password",
       component: () => import("@/views/auth/ForgotPasswordView.vue"),
     },
@@ -32,6 +36,10 @@ const router: Router = createRouter({
       path: "/:pathMatch(.*)*",
       name: "not-found",
       component: () => import("@/views/NotFoundView.vue"),
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      redirect: "/not-found",
     }
   ],
 });

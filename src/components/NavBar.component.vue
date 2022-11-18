@@ -33,7 +33,7 @@ const logout = () => {
               <div class="tabs is-right">
                 <ul>
                   <li>
-                    <router-link to="/" class="button is-light mx-1" @click.prevent="logout">Log Out</router-link>
+                    <router-link to="home" class="button is-light mx-1" @click.prevent="logout">Log Out</router-link>
                   </li>
                 </ul>
               </div>

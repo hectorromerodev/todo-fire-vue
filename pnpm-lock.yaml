@@ -17,6 +17,7 @@ specifiers:
   vite: ^3.1.8
   vue: ^3.2.41
   vue-router: '4'
+  vue-toastification: 2.0.0-rc.5
   vue-tsc: ^1.0.8
 
 dependencies:
@@ -24,6 +25,7 @@ dependencies:
   firebase: 9.14.0
   vue: 3.2.45
   vue-router: 4.1.6_vue@3.2.45
+  vue-toastification: 2.0.0-rc.5_vue@3.2.45
 
 devDependencies:
   '@rushstack/eslint-patch': 1.2.0
@@ -2911,6 +2913,14 @@ packages:
       de-indent: 1.0.2
       he: 1.2.0
     dev: true
+
+  /vue-toastification/2.0.0-rc.5_vue@3.2.45:
+    resolution: {integrity: sha512-q73e5jy6gucEO/U+P48hqX+/qyXDozAGmaGgLFm5tXX4wJBcVsnGp4e/iJqlm9xzHETYOilUuwOUje2Qg1JdwA==}
+    peerDependencies:
+      vue: ^3.0.2
+    dependencies:
+      vue: 3.2.45
+    dev: false
 
   /vue-tsc/1.0.9_typescript@4.7.4:
     resolution: {integrity: sha512-vRmHD1K6DmBymNhoHjQy/aYKTRQNLGOu2/ESasChG9Vy113K6CdP0NlhR0bzgFJfv2eFB9Ez/9L5kIciUajBxQ==}

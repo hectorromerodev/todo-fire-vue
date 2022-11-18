@@ -49,7 +49,7 @@
           </h3>
           <br>
           <p class="has-text-centered">
-            <router-link to="about" class="button is-medium is-info is-outlined">
+            <router-link to="register" class="button is-medium is-info is-outlined">
               Get Started
             </router-link>
           </p>

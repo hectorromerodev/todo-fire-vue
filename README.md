@@ -107,6 +107,13 @@ Hector Romero - [@hectorromerodev](https://twitter.com/hectorromerodev)
 
 Project Link: [Live Todo App](https://todo-e99d3.web.app/)
 
+## Acknowledgements
+
+* <a href="https://www.flaticon.com/free-icons/to-do" title="to do icons">To do icons created by Arkinasi - Flaticon</a>
+
+* Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+
+
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/hectorromerodev/todo-fire-vue.svg?style=flat-square

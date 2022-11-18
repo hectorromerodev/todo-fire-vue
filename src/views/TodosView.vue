@@ -13,6 +13,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../core/firebase";
 import filterTabsComponent from "../components/filterTabs.component.vue";
+import NavBarComponent from "@/components/NavBar.component.vue";
 
 /*
   firebase references
@@ -112,76 +113,60 @@ function onHashChange() {
 </script>
 
 <template>
-  <div class="todo">
-    <h1 class="title has-text-centered">Todo List</h1>
-
-    <form @submit.prevent="addTodo">
-      <div class="field is-grouped mb-5">
-        <p class="control is-expanded">
-          <input
-            v-model="newTodoContent"
-            class="input is-large"
-            type="text"
-            placeholder="Add a todo"
-          />
-        </p>
-        <p class="control">
-          <button :disabled="!newTodoContent" class="button is-info is-large">
-            Add
-          </button>
-        </p>
-      </div>
-    </form>
-
-    <filterTabsComponent
-      v-if="originalTodos.length"
-      :allQty="originalTodos.length"
-      :activeQty="activeQty"
-      :completedQty="completedQty"
-    />
-
-    <div v-else class="has-text-centered">
-      <p class="is-size-4">Start adding new tasks</p>
-    </div>
-
-    <div
-      class="card mb-5"
-      :class="{ 'has-background-success-light': todo.completed }"
-      v-for="todo in todos"
-      :key="todo.id"
-    >
-      <div class="card-content">
-        <div class="content">
-          <div class="columns is-mobile is-vcentered">
-            <div class="column" :class="{ 'has-text-success': todo.completed }">
-              <p :class="{ 'line-through': todo.completed }">
-                {{ todo.content }}
-              </p>
-            </div>
-            <div class="column is-narrow is-4 has-text-right">
-              <button
-                class="button"
-                :class="todo.completed ? 'is-success' : 'is-light'"
-                @click="completeTodo(todo.id)"
-              >
-                &check;
+  <NavBarComponent>
+    <template #default>
+      <div class="todo">
+        <h1 class="title has-text-centered">Todo List</h1>
+      
+        <form @submit.prevent="addTodo">
+          <div class="field is-grouped mb-5">
+            <p class="control is-expanded">
+              <input v-model="newTodoContent" class="input is-large" type="text" placeholder="Add a todo" />
+            </p>
+            <p class="control">
+              <button :disabled="!newTodoContent" class="button is-info is-large">
+                Add
               </button>
-              <button
-                class="button is-danger ml-2"
-                @click="deleteTodo(todo.id)"
-              >
-                &cross;
-              </button>
+            </p>
+          </div>
+        </form>
+      
+        <filterTabsComponent v-if="originalTodos.length" :allQty="originalTodos.length" :activeQty="activeQty"
+          :completedQty="completedQty" />
+      
+        <div v-else class="has-text-centered">
+          <p class="is-size-4">Start adding new tasks</p>
+        </div>
+      
+        <div class="card mb-5" :class="{ 'has-background-success-light': todo.completed }" v-for="todo in todos"
+          :key="todo.id">
+          <div class="card-content">
+            <div class="content">
+              <div class="columns is-mobile is-vcentered">
+                <div class="column" :class="{ 'has-text-success': todo.completed }">
+                  <p :class="{ 'line-through': todo.completed }">
+                    {{ todo.content }}
+                  </p>
+                </div>
+                <div class="column is-narrow is-4 has-text-right">
+                  <button class="button" :class="todo.completed ? 'is-success' : 'is-light'" @click="completeTodo(todo.id)">
+                    &check;
+                  </button>
+                  <button class="button is-danger ml-2" @click="deleteTodo(todo.id)">
+                    &cross;
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      
+        <div v-if="activeQty === 0" class="has-text-centered">
+          <p class="is-size-4">You finished all tasks! &#128513;</p>
+        </div>
       </div>
-    </div>
-
-    <div v-if="activeQty === 0" class="has-text-centered">
-      <p class="is-size-4">You finished all tasks! &#128513;</p>
-    </div>
-  </div>
+    </template>
+  </NavBarComponent>
 </template>
 
 <style scoped>

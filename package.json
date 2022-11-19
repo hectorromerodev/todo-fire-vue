@@ -8,7 +8,9 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-    "firebase:deploy": "firebase deploy --only hosting"
+    "firebase:deploy": "pnpm run build && firebase deploy --only hosting",
+    "prettier": "prettier --write .",
+    "prettier:check": "prettier --check ."
   },
   "dependencies": {
     "bulma": "^0.9.4",

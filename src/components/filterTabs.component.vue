@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, toRefs, type Ref } from "vue";
+import { ref, toRefs, type Ref } from 'vue';
 
 const props = defineProps<{
   allQty: number;
@@ -34,6 +34,6 @@ const props = defineProps<{
 
 let { allQty, activeQty, completedQty } = toRefs(props);
 
-type Filter = "all" | "active" | "completed";
-let activeTab: Ref<Filter> = ref<Filter>("all");
+type Filter = 'all' | 'active' | 'completed';
+let activeTab: Ref<Filter> = ref<Filter>('all');
 </script>

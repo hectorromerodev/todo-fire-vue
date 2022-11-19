@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
-import type { Todo } from "../core/interfaces/todo.interface";
+import { ref, onMounted, watch } from 'vue';
+import type { Todo } from '../core/interfaces/todo.interface';
 import {
   collection,
   addDoc,
@@ -10,18 +10,18 @@ import {
   onSnapshot,
   orderBy,
   query,
-} from "firebase/firestore";
-import { db } from "../core/firebase";
-import filterTabsComponent from "../components/filterTabs.component.vue";
-import NavBarComponent from "@/components/NavBar.component.vue";
+} from 'firebase/firestore';
+import { db } from '../core/firebase';
+import filterTabsComponent from '../components/filterTabs.component.vue';
+import NavBarComponent from '@/components/NavBar.component.vue';
 
 /*
   firebase references
 */
-const todosCollection = collection(db, "todos");
+const todosCollection = collection(db, 'todos');
 const todosCOllectionQuery = query(
   todosCollection,
-  orderBy("createdAt", "desc")
+  orderBy('createdAt', 'desc'),
 );
 
 /*
@@ -31,7 +31,7 @@ const todos = ref<Todo[]>([]);
 const originalTodos = ref<Todo[]>([]);
 const activeQty = ref<number>(0);
 const completedQty = ref<number>(0);
-const newTodoContent = ref("");
+const newTodoContent = ref('');
 
 const addTodo = () => {
   const newTodo: Partial<Todo> = {
@@ -40,11 +40,11 @@ const addTodo = () => {
     createdAt: Date.now(),
   };
   addDoc(todosCollection, newTodo);
-  newTodoContent.value = "";
+  newTodoContent.value = '';
 };
 
 const deleteTodo = (id: string) => {
-  deleteDoc(doc(db, "todos", id));
+  deleteDoc(doc(db, 'todos', id));
 };
 
 const completeTodo = (id: string) => {
@@ -73,10 +73,10 @@ onMounted(() => {
 // CALCULATE ACTIVE AND COMPLETED TODOS
 watch(originalTodos, () => {
   activeQty.value = originalTodos.value.filter(
-    (todo) => !todo.completed
+    (todo) => !todo.completed,
   ).length;
   completedQty.value = originalTodos.value.filter(
-    (todo) => todo.completed
+    (todo) => todo.completed,
   ).length;
 });
 
@@ -95,14 +95,14 @@ const filterCompleted = () => {
 };
 
 // WATCH FOR URL CHANGES
-window.addEventListener("hashchange", onHashChange);
+window.addEventListener('hashchange', onHashChange);
 function onHashChange() {
-  const route = window.location.hash.replace(/#\/?/, "");
+  const route = window.location.hash.replace(/#\/?/, '');
   switch (route) {
-    case "active":
+    case 'active':
       filterActive();
       break;
-    case "completed":
+    case 'completed':
       filterCompleted();
       break;
     default:
@@ -117,42 +117,68 @@ function onHashChange() {
     <template #default>
       <div class="todo">
         <h1 class="title has-text-centered">Todo List</h1>
-      
+
         <form @submit.prevent="addTodo">
           <div class="field is-grouped mb-5">
             <p class="control is-expanded">
-              <input v-model="newTodoContent" class="input is-large" type="text" placeholder="Add a todo" />
+              <input
+                v-model="newTodoContent"
+                class="input is-large"
+                type="text"
+                placeholder="Add a todo"
+              />
             </p>
             <p class="control">
-              <button :disabled="!newTodoContent" class="button is-info is-large">
+              <button
+                :disabled="!newTodoContent"
+                class="button is-info is-large"
+              >
                 Add
               </button>
             </p>
           </div>
         </form>
-      
-        <filterTabsComponent v-if="originalTodos.length" :allQty="originalTodos.length" :activeQty="activeQty"
-          :completedQty="completedQty" />
-      
+
+        <filterTabsComponent
+          v-if="originalTodos.length"
+          :allQty="originalTodos.length"
+          :activeQty="activeQty"
+          :completedQty="completedQty"
+        />
+
         <div v-else class="has-text-centered">
           <p class="is-size-4">Start adding new tasks</p>
         </div>
-      
-        <div class="card mb-5" :class="{ 'has-background-success-light': todo.completed }" v-for="todo in todos"
-          :key="todo.id">
+
+        <div
+          class="card mb-5"
+          :class="{ 'has-background-success-light': todo.completed }"
+          v-for="todo in todos"
+          :key="todo.id"
+        >
           <div class="card-content">
             <div class="content">
               <div class="columns is-mobile is-vcentered">
-                <div class="column" :class="{ 'has-text-success': todo.completed }">
+                <div
+                  class="column"
+                  :class="{ 'has-text-success': todo.completed }"
+                >
                   <p :class="{ 'line-through': todo.completed }">
                     {{ todo.content }}
                   </p>
                 </div>
                 <div class="column is-narrow is-4 has-text-right">
-                  <button class="button" :class="todo.completed ? 'is-success' : 'is-light'" @click="completeTodo(todo.id)">
+                  <button
+                    class="button"
+                    :class="todo.completed ? 'is-success' : 'is-light'"
+                    @click="completeTodo(todo.id)"
+                  >
                     &check;
                   </button>
-                  <button class="button is-danger ml-2" @click="deleteTodo(todo.id)">
+                  <button
+                    class="button is-danger ml-2"
+                    @click="deleteTodo(todo.id)"
+                  >
                     &cross;
                   </button>
                 </div>
@@ -160,7 +186,7 @@ function onHashChange() {
             </div>
           </div>
         </div>
-      
+
         <div v-if="activeQty === 0" class="has-text-centered">
           <p class="is-size-4">You finished all tasks! &#128513;</p>
         </div>

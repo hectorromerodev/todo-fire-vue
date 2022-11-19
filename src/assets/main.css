@@ -1,9 +1,9 @@
 @import './base.css';
 
 /* Import bulma styles css */
-@import "bulma/css/bulma.min.css";
+@import 'bulma/css/bulma.min.css';
 
-#app{
+#app {
   margin: 0 auto;
   font-weight: normal;
 }

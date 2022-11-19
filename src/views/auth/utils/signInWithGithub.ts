@@ -1,14 +1,15 @@
-import { auth } from '@/core/firebase';
+import { auth } from '@/core/firebase/index';
+import { GithubAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useRouter } from 'vue-router';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useToast } from 'vue-toastification';
 
-const signInGoogle = async () => {
+
+
+const signInWithGithub = async () => {
   const router = useRouter();
   const toast = useToast();
-  const provider = new GoogleAuthProvider();
-  await signInWithPopup(auth, provider)
-    .then(() => {
+  const provider = new GithubAuthProvider(); 
+  await signInWithPopup(auth, provider).then(() => {
       toast.success('Login successful');
       router.push('/todos');
     })
@@ -19,4 +20,4 @@ const signInGoogle = async () => {
     });
 };
 
-export default signInGoogle;
+export default signInWithGithub;

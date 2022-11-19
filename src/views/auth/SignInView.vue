@@ -6,6 +6,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useToast } from 'vue-toastification';
 import { checkEmailPassword } from './utils/checkEmailPassword';
 import signInWithGoogle from './utils/signInWithGoogle';
+import signInWithGithub from './utils/signInWithGithub';
 
 /*
   initialising plugins
@@ -45,7 +46,7 @@ const isFormValid = computed(() =>
 );
 </script>
 <template>
-  <section class="hero is-light is-fullheight">
+  <section class="hero is-light is-fullheight has-background-white">
     <div class="hero-body">
       <div class="container has-text-centered">
         <div class="column is-4 is-offset-4">
@@ -107,6 +108,12 @@ const isFormValid = computed(() =>
                 @click.prevent="signInWithGoogle"
               >
                 <span>Login with Google</span>
+              </button>
+              <button 
+                class="button is-block is-dark is-medium is-fullwidth"
+                @click.prevent="signInWithGithub"
+              >
+                <span>Login with Github</span>
               </button>
             </div>
 

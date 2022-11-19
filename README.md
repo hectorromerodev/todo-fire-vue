@@ -9,7 +9,7 @@
 
 # Todos Web app
 
-[![Contributors][contributors-shield]][contributors-url] [![Forks][forks-shield]][forks-url] [![Stargazers][stars-shield]][stars-url] [![Issues][issues-shield]][issues-url]
+[![Contributors][contributors-shield]][contributors-url] [![Forks][forks-shield]][forks-url] [![Stargazers][stars-shield]][stars-url] [![Issues][issues-shield]][issues-url] [![MIT License][license-shield]][license-url] [![build-shield]][build-url]
 
 <!-- ABOUT THE PROJECT -->
 
@@ -127,3 +127,7 @@ Project Link: [Live Todo App](https://todo-e99d3.web.app/)
 [stars-url]: https://github.com/hectorromerodev/todo-fire-vue/stargazers
 [issues-shield]: https://img.shields.io/github/issues/hectorromerodev/todo-fire-vue.svg?style=flat-square
 [issues-url]: https://github.com/hectorromerodev/todo-fire-vue/issues
+[license-shield]: https://img.shields.io/github/license/hectorromerodev/todo-fire-vue.svg?style=flat-square
+[license-url]: LICENSE
+[build-shield]: https://github.com/hectorromerodev/todo-fire-vue/actions/workflows/firebase-hosting-merge.yml/badge.svg?branch=main
+[build-url]: https://github.com/hectorromerodev/todo-fire-vue/actions/workflows/firebase-hosting-merge.yml

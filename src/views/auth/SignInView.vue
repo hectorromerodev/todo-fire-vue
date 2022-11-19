@@ -1,4 +1,51 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { computed, ref, watch, watchEffect } from "vue";
+import { auth } from "@/core/firebase";
+import { RouterLink, useRouter } from "vue-router";
+import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { useToast } from "vue-toastification";
+import {checkEmailPassword} from "./utils/checkEmailPassword"
+import signInWithGoogle from "./utils/signInWithGoogle"
+
+/*
+  initialising plugins
+*/
+const router = useRouter();
+const toast = useToast();
+
+/*
+  reactive variables
+*/
+const email = ref('')
+const password = ref('')
+
+/*
+  methods
+*/
+const signInEmail =  async () => {
+  await signInWithEmailAndPassword(auth, email.value, password.value)
+  .then((userCredential: any) => {
+    toast.success('Login successful')
+    toast.info('Redirecting to dashboard')
+    router.push('/todos');
+  })
+  .catch((error: { code: number, message: string }) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    toast.error(errorMessage)
+    console.error(errorCode, errorMessage);
+  });
+}
+
+
+/*
+  computed
+*/
+const isFormValid = computed(() => checkEmailPassword(email.value, password.value));
+
+
+
+</script>
 <template>
   <section class="hero is-light is-fullheight">
     <div class="hero-body">
@@ -10,37 +57,36 @@
                 src="https://firebasestorage.googleapis.com/v0/b/todo-e99d3.appspot.com/o/todo-256.png?alt=media&token=8e308f35-e3e7-4309-a3fc-6fb17833f0b0"
                 height="150" width="150">
             </figure>
-            <p class="subtitle has-text-grey">Sign In with your email</p>
-            <form>
+            <p class="subtitle has-text-grey">Login with your email</p>
+            <form @submit.prevent="signInEmail">
               <div class="field">
                 <div class="control">
-                  <input class="input is-large" type="email" placeholder="Your Email" autofocus>
+                  <input class="input is-large" type="email" placeholder="Your Email" autofocus required v-model="email">
                 </div>
               </div>
 
               <div class="field">
                 <div class="control">
-                  <input class="input is-large" type="password" placeholder="Your Password">
+                  <input class="input is-large" type="password" placeholder="Your Password" required v-model="password">
+                </div>
+                <div class="help has-text-right">
+                  <RouterLink to="/forgot-password">Forgot password?</RouterLink>
                 </div>
               </div>
-              <button class="button is-block is-info is-medium is-fullwidth">Sign In</button>
+              <button type="submit" class="button is-block is-info is-medium is-fullwidth" :disabled="!isFormValid">LOGIN</button>
             </form>
             <p class="line-before-text line-after-text subtitle has-text-grey my-4">Or</p>
             <div class="buttons">
-              <button class="button is-block is-danger is-medium is-fullwidth">
-                <span>Sign In with Google</span>
-              </button>
-              <button class="button is-block is-black is-medium is-fullwidth">
-                <span>Sign In with Github</span>
+              <button class="button is-block is-danger is-medium is-fullwidth" @click.prevent="signInWithGoogle">
+                <span>Login with Google</span>
               </button>
             </div>
 
             <hr class="mt-6" />
 
             <p class="has-text-grey">
-              <router-link to="register">Sign Up</router-link> &nbsp;·&nbsp;
-              <router-link to="/">Forgot Password</router-link> &nbsp;·&nbsp;
-              <router-link to="/">Need Help?</router-link>
+              <router-link to="home">Home</router-link> &nbsp;·&nbsp;
+              <router-link to="register">Create an Account</router-link>
             </p>
 
           </div>

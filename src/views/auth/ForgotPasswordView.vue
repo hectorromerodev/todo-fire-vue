@@ -50,7 +50,7 @@ const isFormValid = computed(() => checkEmail(email.value));
 </script>
 
 <template>
-  <div class="h-full columns is-vcentered is-centered">
+  <div class="h-full columns is-vcentered is-centered has-background-white">
     <div class="column is-5">
       <div class="box" v-if="!showMessage">
         <h1 class="title py-6 has-text-centered">Forgot Password</h1>
